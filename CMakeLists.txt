@@ -19,6 +19,10 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        mazefield.h
+        mazefield.cpp
+        model.h
+        model.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

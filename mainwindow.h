@@ -8,6 +8,9 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <QFileDialog>
+
+#include <model.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,17 +21,16 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(Model *model, QWidget *parent = nullptr);
     ~MainWindow();
 
-    virtual void paintEvent(QPaintEvent *event);
+    void loadMaze();
 
    public:
-    std::vector<std::vector<int>> data_vert;
-
-    std::vector<std::vector<int>> data_hor;
 
 private:
     Ui::MainWindow *ui;
+    Model *model_;
+
 };
 #endif // MAINWINDOW_H
