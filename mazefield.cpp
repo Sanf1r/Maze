@@ -70,8 +70,8 @@ void mazefield::posToAxis() {
 
 QPoint mazefield::axisToPos(std::pair<int,int> pathIndex) {
 
-        int xpos = pathIndex.first * cellWidth_ + cellWidth_ / 2;
-        int ypos = pathIndex.second * cellHeight_ + cellHeight_ / 2;
+        int xpos = pathIndex.second * cellWidth_ + cellWidth_ / 2;
+        int ypos = pathIndex.first * cellHeight_ + cellHeight_ / 2;
         return QPoint(xpos, ypos);
 
 }

@@ -241,25 +241,29 @@ void Model::solveMaze(int step) {
 }
 
 void Model::makeWay() {
-    int x_start = 0, y_start = 0, x_end = 0, y_end = 4;
-    map_[x_start][y_start] = 0;
+    int i_start = 0, j_start = 0, i_end = 0, j_end = 4;
+    map_[i_start][j_start] = 0;
     int step = 0;
-    while (map_[x_end][y_end] == -1) {
+    while (map_[i_end][j_end] == -1) {
     solveMaze(step++);
     }
-    int new_x = x_end, new_y = y_end;
+    int new_i = i_end, new_j = j_end;
     rightPath_.clear();
-    rightPath_.push_back(std::pair(x_end,y_end));
+    rightPath_.push_back(std::pair(i_end,j_end));
     while (step != 0) {
-                    if (new_y < rows_ - 1 && !data_hor[new_y][new_x] && map_[new_y + 1][new_x] == step - 1)
-                        new_y++;
-                    else if (new_y > 0 && !data_hor[new_y - 1][new_x] && map_[new_y - 1][new_x] == step - 1)
-                        new_y--;
-                    else if (new_x < cols_ - 1 && !!data_vert[new_y][new_x] && map_[new_y][new_x + 1] == step - 1)
-                        new_x++;
-                    else if (new_x > 0 && !data_vert[new_y][new_x - 1] && map_[new_y][new_x - 1] == step - 1)
-                        new_x--;
-                    rightPath_.push_back(std::pair(new_x,new_y));
+                    // move down
+                    if (new_i < rows_ - 1 && !data_hor[new_i][new_j] && map_[new_i + 1][new_j] == step - 1)
+                        new_i++;
+                    // move up
+                    else if (new_i > 0 && !data_hor[new_i - 1][new_j] && map_[new_i - 1][new_j] == step - 1)
+                        new_i--;
+                    // move right
+                    else if (new_j < cols_ - 1 && !data_vert[new_i][new_j] && map_[new_i][new_j + 1] == step - 1)
+                        new_j++;
+                    // move left
+                    else if (new_j > 0 && !data_vert[new_i][new_j - 1] && map_[new_i][new_j - 1] == step - 1)
+                        new_j--;
+                    rightPath_.push_back(std::pair(new_i,new_j));
                     step--;
     }
 }
@@ -273,6 +277,9 @@ void Model::mapOut() {
         }
         std::cout << std::endl;
         }
+    for (int i = 0; i < (int)rightPath_.size(); i++) {
+        std::cout << "i = " << rightPath_[i].first << " j = " << rightPath_[i].second << std::endl;
+    }
 }
 
 
