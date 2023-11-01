@@ -13,8 +13,8 @@ void mazefield::SetModel(Model* model) {
 void mazefield::paintEvent(QPaintEvent *event)
 {
 QPainter painter(this);
-QPen pen = (QApplication::palette().text().color());  // creates a default pen
-pen.setWidth(2);
+QPen pen(QApplication::palette().text().color(),2);
+QPen pen_2(Qt::red, 2);
 painter.setPen(pen);
 
 painter.drawLine(0, 1, 499, 1);
@@ -52,8 +52,7 @@ for (int i = 0; i < model_->GetRows(); i++) {
 
 
     if (!model_->GetPath().empty()) {
-        pen.setColor(Qt::red);
-        painter.setPen(pen);
+        painter.setPen(pen_2);
     for (unsigned i = 0; i < model_->GetPath().size() - 1; i++) {
         painter.drawLine(axisToPos(model_->GetPath()[i]), axisToPos(model_->GetPath()[i + 1]));
     }
