@@ -41,9 +41,45 @@ void Model::parse(const std::string &path)
         paint_ = true;
 }
 
+bool Model::randomBool() {
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    std::uniform_int_distribution<int> gen(0, 1);
+    return (gen(rng) == 1) ? true : false;
+}
+
 void Model::generateMaze(int rows, int cols) {
     rows_ = rows;
     cols_ = cols;
+    counter_ = 1;
+
+    data_vert.clear();
+    data_hor.clear();
+    genString.clear();
+
+    data_vert.resize(rows_);
+    for (int i = 0; i < (int)data_vert.size(); ++i) {
+        data_vert[i].resize(cols_, 0);
+    }
+    data_hor.resize(rows_);
+    for (int i = 0; i < (int)data_vert.size(); ++i) {
+        data_hor[i].resize(cols_, 0);
+    }
+
+    fillEmpty();
+    for (int j = 0; j < rows_ - 1; j++) {
+            /* Шаг 2 */
+            assignUniqueSet();
+            /* Шаг 3 */
+            addingVerticalWalls(j);
+            /* Шаг 4 */
+            addingHorizontalWalls(j);
+            checkedHorizontalWalls(j);
+            /* Шаг 5.1*/
+            preparatingNewLine(j);
+        }
+    /* Шаг 5.2 */
+        addingEndLine();
 }
 
 void Model::fillEmpty() {
@@ -54,12 +90,190 @@ void Model::fillEmpty() {
 
 void Model::assignUniqueSet() {
     for (int i = 0; i < cols_; i++) {
-        /* Проверяем на пустую ячейку */
         if (genString[i] == 0) {
-            /* Присваиваем ячейки уникальное множество */
             genString[i] = counter_;
             counter_++;
         }
     }
 }
+
+void Model::addingVerticalWalls(int row) {
+    for (int i = 0; i < cols_ - 1; i++) {
+        bool choise = randomBool();
+        if (choise == true || genString[i] == genString[i + 1]) {
+            data_vert[row][i] = 1;
+        } else {
+            /* Объединение ячеек в одно множество */
+            mergeSet(i, genString[i]);
+        }
+    }
+    /* Добавление правой стенки в последней ячейки */
+    data_vert[row][cols_ - 1] = 1;
+}
+
+/* Объединение ячеек в одно множество */
+void Model::mergeSet(int index, int element) {
+    int mutableSet = genString[index + 1];
+    for (int j = 0; j < cols_; j++) {
+        /* Проверка ячеек на одно множество */
+        if (genString[j] == mutableSet) {
+            /* Объединение ячейки в множество */
+            genString[j] = element;
+        }
+    }
+}
+
+/* Добавление нижней горизонтальной стенки */
+void Model::addingHorizontalWalls(int row) {
+    for (int i = 0; i < cols_; i++) {
+        /* Ставим стенку или нет */
+        bool choise = randomBool();
+        /* Проверка, что множество имеет более одной ячейки (это предовратит замкнутые области  */
+        if (calculateUniqueSet(genString[i]) != 1 && choise == true) {
+            /* Ставим горизонтальную стенку */
+            data_hor[row][i] = 1;
+        }
+    }
+}
+
+/* Подсчет ячеек, которые содержаться в уникальном множестве */
+int Model::calculateUniqueSet(int element) {
+    int countUniqSet = 0;
+    for (int i = 0; i < cols_; i++) {
+        if (genString[i] == element) {
+            countUniqSet++;
+        }
+    }
+    return countUniqSet;
+}
+
+/* Проверка условие 4.1 и 4.2 */
+void Model::checkedHorizontalWalls(int row) {
+    for (int i = 0; i < cols_; i++) {
+        if (calculateHorizontalWalls(genString[i], row) == 0) {
+            data_hor[row][i] = 0;
+        }
+    }
+}
+
+/* Подсчет горизонтальных стен у ячеек уникального множества */
+int Model::calculateHorizontalWalls(int element, int row) {
+    int countHorizontalWalls = 0;
+    for (int i = 0; i < cols_; i++) {
+        if (genString[i] == element && data_hor[row][i] == 0) {
+            countHorizontalWalls++;
+        }
+    }
+    return countHorizontalWalls;
+}
+
+void Model::preparatingNewLine(int row) {
+    for (int i = 0; i < cols_; i++) {
+        if (data_hor[row][i] == 1) {
+            /* Присваиваем ячейки пустое множество */
+            genString[i] = 0;
+        }
+    }
+}
+
+/* Добавление последней строки */
+void Model::addingEndLine() {
+    assignUniqueSet();
+    addingVerticalWalls(rows_ - 1);
+    checkedEndLine();
+}
+
+/* Проверка условий на добавление последней строки */
+void Model::checkedEndLine() {
+    for (int i = 0; i < cols_ - 1; i++) {
+        /* Проверка условия пункта 5.2.1 */
+        if (genString[i] != genString[i + 1]) {
+            /* Убираем вертикальную стенку */
+            data_vert[rows_ - 1][i] = 0;
+            /* Объединяем множества */
+            mergeSet(i, genString[i]);
+        }
+        /* Добавляем горизонтальные стенки */
+        data_hor[rows_ - 1][i] = 1;
+    }
+    /* Добавляем горизонтальную стенку в последней ячейке */
+    data_hor[rows_ - 1][cols_ - 1] = 1;
+}
+
+void Model::createMap() {
+    map_.clear();
+    map_.resize(rows_);
+    for (int i = 0; i < (int)map_.size(); ++i) {
+        map_[i].resize(cols_, -1);
+    }
+}
+
+int Model::enterBox(int value, int box) {
+    if (box == -1)
+            box = value;
+        else
+            box = std::min(box, value);
+        return box;
+}
+
+void Model::solveMaze(int step) {
+    int result = 0;
+        for (int i = 0; i < rows_; i++) {
+            for (int j = 0; j < cols_; j++) {
+                if (map_[i][j] == step) {
+                    result++;
+                    if (i < rows_ - 1 && !data_hor[i][j]) {
+                        map_[i + 1][j] = enterBox(step + 1, map_[i + 1][j]);
+                    }
+                    if (i > 0 && !data_hor[i - 1][j]) {
+                        map_[i - 1][j] = enterBox(step + 1, map_[i - 1][j]);
+                    }
+                    if (j < cols_ - 1 && !data_vert[i][j]) {
+                        map_[i][j + 1] = enterBox(step + 1, map_[i][j + 1]);
+                    }
+                    if (j > 0 && !data_vert[i][j - 1]) {
+                        map_[i][j - 1] = enterBox(step + 1, map_[i][j - 1]);
+                    }
+                }
+            }
+        }
+//        return result;
+}
+
+void Model::makeWay() {
+    int x_start = 0, y_start = 0, x_end = 0, y_end = 4;
+    map_[x_start][y_start] = 0;
+    int step = 0;
+    while (map_[x_end][y_end] == -1) {
+    solveMaze(step++);
+    }
+    int new_x = x_end, new_y = y_end;
+    rightPath_.clear();
+    rightPath_.push_back(std::pair(x_end,y_end));
+    while (step != 0) {
+                    if (new_y < rows_ - 1 && !data_hor[new_y][new_x] && map_[new_y + 1][new_x] == step - 1)
+                        new_y++;
+                    else if (new_y > 0 && !data_hor[new_y - 1][new_x] && map_[new_y - 1][new_x] == step - 1)
+                        new_y--;
+                    else if (new_x < cols_ - 1 && !!data_vert[new_y][new_x] && map_[new_y][new_x + 1] == step - 1)
+                        new_x++;
+                    else if (new_x > 0 && !data_vert[new_y][new_x - 1] && map_[new_y][new_x - 1] == step - 1)
+                        new_x--;
+                    rightPath_.push_back(std::pair(new_x,new_y));
+                    step--;
+    }
+}
+
+void Model::mapOut() {
+    createMap();
+    makeWay();
+    for (int i = 0; i < rows_; i++) {
+        for (int j = 0; j < cols_; j++) {
+            std::cout << map_[i][j] << " ";
+        }
+        std::cout << std::endl;
+        }
+}
+
+
 

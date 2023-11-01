@@ -3,7 +3,7 @@
 mazefield::mazefield(QWidget *parent)
     : QWidget{parent}
 {
-
+    setFocusPolicy(Qt::ClickFocus);
 }
 
 void mazefield::SetModel(Model* model) {
@@ -17,12 +17,11 @@ QPen pen = (QApplication::palette().text().color());  // creates a default pen
 pen.setWidth(2);
 painter.setPen(pen);
 
-if (paint) {
 painter.drawLine(0, 1, 499, 1);
 painter.drawLine(1, 0, 1, 499);
 
-double cellWidth_ = 500.0 / model_->GetCols();
-double cellHeight_ = 500.0 / model_->GetRows();
+cellWidth_ = 500.0 / model_->GetCols();
+cellHeight_ = 500.0 / model_->GetRows();
 
 for (int i = 0; i < model_->GetRows(); i++) {
         for (int j = 0; j < model_->GetCols(); j++) {
@@ -50,8 +49,58 @@ for (int i = 0; i < model_->GetRows(); i++) {
             }
         }
     }
-} else {
-    painter.drawText(QPoint(200, 250), "Let there be mazes!");
+
+
+    if (!model_->GetPath().empty()) {
+        pen.setColor(Qt::red);
+        painter.setPen(pen);
+    for (unsigned i = 0; i < model_->GetPath().size() - 1; i++) {
+        painter.drawLine(axisToPos(model_->GetPath()[i]), axisToPos(model_->GetPath()[i + 1]));
+    }
+    }
 }
+
+void mazefield::posToAxis() {
+    x_start_ = begin_.x() / cellWidth_;
+    y_start_ = begin_.y() / cellHeight_;
+
+    x_end_ = end_.x() / cellWidth_;
+    y_end_ = end_.y() / cellHeight_;
 }
+
+QPoint mazefield::axisToPos(std::pair<int,int> pathIndex) {
+
+        int xpos = pathIndex.first * cellWidth_ + cellWidth_ / 2;
+        int ypos = pathIndex.second * cellHeight_ + cellHeight_ / 2;
+        return QPoint(xpos, ypos);
+
+}
+
+void mazefield::mousePressEvent(QMouseEvent *event) {
+
+        if (event->button() == Qt::LeftButton && !left) {
+            begin_ = event->pos();
+            left = true;
+            std::cout << "LEFT" << std::endl;
+        } else if (event->button() == Qt::RightButton && !right) {
+            end_ = event->pos();
+            right = true;
+            std::cout << "RIGHT" << std::endl;
+        }
+
+        update();
+
+}
+
+void mazefield::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_Space) {
+        left = false;
+        right = false;
+        update();
+    }
+}
+
+//void mazefield::keyPressEvent(QKeyEvent* event) {
+//    qDebug() << event->key();
+//}
 

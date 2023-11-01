@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <QMainWindow>
 #include <QApplication>
+#include <QKeyEvent>
+#include <QMouseEvent>
 
 #include "model.h"
 
@@ -18,14 +20,20 @@ public:
 
     void SetModel(Model *model);
 
-    void SetPaint(bool flag) { paint = flag; }
-
-signals:
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     Model *model_;
-    bool paint = false;
+    QPoint begin_, end_;
+    bool left = false, right = false;
+    double cellWidth_ = 0.0;
+    double cellHeight_ = 0.0;
+    double x_start_, y_start_,x_end_,y_end_;
 
+    void posToAxis();
+    QPoint axisToPos(std::pair<int, int> pathIndex);
 };
 
 #endif // MAZEFIELD_H

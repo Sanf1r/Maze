@@ -25,8 +25,7 @@ public:
     ~MainWindow();
 
     void loadMaze();
-
-   public:
+    void genMaze();
 
 private:
     Ui::MainWindow *ui;
