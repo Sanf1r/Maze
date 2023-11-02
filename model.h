@@ -19,9 +19,8 @@ public:
     std::vector<std::vector<int>> &GetHor() {return data_hor;}
     std::vector<std::pair<int,int>> &GetPath() {return rightPath_;}
     void generateMaze(int rows, int cols);
-
-
-    void mapOut();
+    void mapOut(int i_start, int j_start, int i_end, int j_end);
+    void clearMap();
 private:
     bool paint_ = false;
     int rows_ = 0;
@@ -53,8 +52,8 @@ private:
     void preparatingNewLine(int row);
     void createMap();
     int enterBox(int value, int box);
-    void makeWay();
     void solveMaze(int step);
+    void makeWay(int i_start, int j_start, int i_end, int j_end);
 };
 
 #endif // MODEL_H

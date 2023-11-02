@@ -31,5 +31,6 @@ private:
     Ui::MainWindow *ui;
     Model *model_;
 
+
 };
 #endif // MAINWINDOW_H

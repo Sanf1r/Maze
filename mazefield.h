@@ -20,9 +20,20 @@ public:
 
     void SetModel(Model *model);
 
+
+    double i_start() const;
+
+    double j_start() const;
+
+    double i_end() const;
+
+    double j_end() const;
+
+    void resetFlags();
+
+
 protected:
     void mousePressEvent(QMouseEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     Model *model_;
@@ -30,10 +41,11 @@ private:
     bool left = false, right = false;
     double cellWidth_ = 0.0;
     double cellHeight_ = 0.0;
-    double x_start_, y_start_,x_end_,y_end_;
+    double i_start_, j_start_,i_end_,j_end_;
 
-    void posToAxis();
     QPoint axisToPos(std::pair<int, int> pathIndex);
+    void startPoint();
+    void endPoint();
 };
 
 #endif // MAZEFIELD_H

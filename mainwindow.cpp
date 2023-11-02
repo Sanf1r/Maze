@@ -19,18 +19,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::loadMaze()
 {
-
       QString fileName = QFileDialog::getOpenFileName(
           this, "Open Maze File", "", "Maze Files (*.txt);;All Files (*)");
       if (!fileName.isEmpty()) {
           model_->parse(fileName.toStdString());
+          model_->clearMap();
+          ui->maze->resetFlags();
           update();
       }
 }
 
 void MainWindow::genMaze()
 {
+      model_->clearMap();
+      ui->maze->resetFlags();
       model_->generateMaze(ui->spinBox->value(),ui->spinBox_2->value());
-      model_->mapOut();
+
       update();
 }
+

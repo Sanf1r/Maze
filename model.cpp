@@ -240,8 +240,7 @@ void Model::solveMaze(int step) {
 //        return result;
 }
 
-void Model::makeWay() {
-    int i_start = 0, j_start = 0, i_end = 0, j_end = 4;
+void Model::makeWay(int i_start, int j_start, int i_end, int j_end) {
     map_[i_start][j_start] = 0;
     int step = 0;
     while (map_[i_end][j_end] == -1) {
@@ -268,18 +267,14 @@ void Model::makeWay() {
     }
 }
 
-void Model::mapOut() {
+void Model::mapOut(int i_start, int j_start, int i_end, int j_end) {
     createMap();
-    makeWay();
-    for (int i = 0; i < rows_; i++) {
-        for (int j = 0; j < cols_; j++) {
-            std::cout << map_[i][j] << " ";
-        }
-        std::cout << std::endl;
-        }
-    for (int i = 0; i < (int)rightPath_.size(); i++) {
-        std::cout << "i = " << rightPath_[i].first << " j = " << rightPath_[i].second << std::endl;
-    }
+    makeWay(i_start, j_start, i_end, j_end);
+}
+
+void Model::clearMap() {
+    map_.clear();
+    rightPath_.clear();
 }
 
 
