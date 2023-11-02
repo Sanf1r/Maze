@@ -9,6 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include <model.h>
 
@@ -26,10 +27,12 @@ public:
 
     void loadMaze();
     void genMaze();
+        void redme();
 
 private:
     Ui::MainWindow *ui;
     Model *model_;
+
 
 
 };
