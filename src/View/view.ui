@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>View</class>
+ <widget class="QMainWindow" name="View">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -54,7 +54,7 @@
      <string>LOAD</string>
     </property>
    </widget>
-   <widget class="mazefield" name="maze" native="true">
+   <widget class="s21::MazeField" name="maze" native="true">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -171,9 +171,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>mazefield</class>
+   <class>MazeField</class>
    <extends>QWidget</extends>
-   <header>mazefield.h</header>
+   <header>View/mazefield.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
