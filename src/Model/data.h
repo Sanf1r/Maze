@@ -23,13 +23,13 @@ class Data {
   int GetColumns() const { return columns_; }
 
   void Init(int size, int num) {
-      data_.resize(size,num);
-      std::fill(data_.begin(), data_.end(), num);
+    data_.resize(size, num);
+    std::fill(data_.begin(), data_.end(), num);
   }
 
  private:
   int rows_ = 0;
-  int columns_= 0;
+  int columns_ = 0;
   std::vector<int> data_;
 };
 

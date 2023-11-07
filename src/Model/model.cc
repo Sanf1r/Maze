@@ -25,7 +25,7 @@ bool Model::Load(const std::string &path) {
     int x;
     c = 0;
     while (ss >> x || !ss.eof()) {
-        if ((x != 1 && x != 0) || ss.fail()) return false;
+      if ((x != 1 && x != 0) || ss.fail()) return false;
       data_vert_.Push(x);
       c++;
     }
@@ -40,7 +40,7 @@ bool Model::Load(const std::string &path) {
     c = 0;
     int x;
     while (ss >> x || !ss.eof()) {
-        if ((x != 1 && x != 0) || ss.fail()) return false;
+      if ((x != 1 && x != 0) || ss.fail()) return false;
       data_hor_.Push(x);
       c++;
     }
@@ -51,29 +51,28 @@ bool Model::Load(const std::string &path) {
 }
 
 void Model::Save(const std::string &path) {
-    std::ofstream f(path);
+  std::ofstream f(path);
 
-      f << rows_ << " " << cols_ << std::endl;
-      for (int i = 0; i < rows_; ++i) {
-        for (int j = 0; j < cols_; ++j) {
-            if (j != 0) f << ' ';
-          f << data_vert_(i,j);
-        }
-        f << std::endl;
-      }
+  f << rows_ << " " << cols_ << std::endl;
+  for (int i = 0; i < rows_; ++i) {
+    for (int j = 0; j < cols_; ++j) {
+      if (j != 0) f << ' ';
+      f << data_vert_(i, j);
+    }
+    f << std::endl;
+  }
 
-      f << std::endl;
+  f << std::endl;
 
-      for (int i = 0; i < rows_; ++i) {
-        for (int j = 0; j < cols_; ++j) {
-            if (j != 0) f << ' ';
-          f << data_hor_(i,j);
-        }
-        f << std::endl;
-      }
+  for (int i = 0; i < rows_; ++i) {
+    for (int j = 0; j < cols_; ++j) {
+      if (j != 0) f << ' ';
+      f << data_hor_(i, j);
+    }
+    f << std::endl;
+  }
 
-      f.close();
-
+  f.close();
 }
 
 bool Model::RandomBool() {

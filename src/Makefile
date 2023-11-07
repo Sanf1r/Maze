@@ -50,9 +50,9 @@ dist:
 tests: 
 	rm -f *.gcda *.gcno
 	g++ $(FLAGS) $(ASAN) $(GTEST) $(COVER) \
-	./Testing/tests.cc ./Model/Model.cc ./Model/MatrixNN.cc ./Model/GraphNN.cc ./Model/DataParse.cc -o test
+	./Tests/tests.cc ./Model/model.cc -o test
 	./test
-	geninfo . -b . -o ./coverage.info --no-external
+	geninfo . -b . -o ./coverage.info --no-external --ignore-errors mismatch
 	genhtml coverage.info -o ./coverage
 
 .PHONY: gcov_report

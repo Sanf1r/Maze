@@ -15,17 +15,16 @@ add_compile_options(-O3 -Wall -Wextra -Werror -std=c++17 -pedantic)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-
 add_executable(Maze
-        main.cpp
-        View/view.cpp
+        main.cc
+        View/view.cc
         View/view.h
         View/view.ui
         View/mazefield.h
-        View/mazefield.cpp
+        View/mazefield.cc
         Controller/controller.h
         Model/model.h
-        Model/model.cpp
+        Model/model.cc
         Model/data.h
 )
 

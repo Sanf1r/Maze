@@ -28,7 +28,7 @@ class Model {
   void SolveMaze(int i_start, int j_start, int i_end, int j_end);
   void ClearMap();
 
-private:
+ private:
   int rows_ = 0;
   int cols_ = 0;
   int counter_ = 1;

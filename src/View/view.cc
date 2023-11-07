@@ -15,31 +15,31 @@ View::View(Controller *c, QWidget *parent)
 View::~View() { delete ui_; }
 
 void View::LoadMaze() {
-  QString fileName = QFileDialog::getOpenFileName(
-      this, "Open Maze File", "", "Maze Files (*.txt)");
+  QString fileName = QFileDialog::getOpenFileName(this, "Open Maze File", "",
+                                                  "Maze Files (*.txt)");
   if (!fileName.isEmpty()) {
-      controller_->ClearMap();
-      ui_->maze->ResetFlags();
+    controller_->ClearMap();
+    ui_->maze->ResetFlags();
+    update();
+    if (controller_->Load(fileName.toStdString())) {
+    } else {
+      controller_->GenerateMaze(5, 5);
       update();
-      if (controller_->Load(fileName.toStdString())) {
-      } else {
-          controller_->GenerateMaze(5, 5);
-          update();
-          QMessageBox messageBox;
-          messageBox.critical(0, "Error", "Error with maze file!\n"
-                                          "Random maze generated.");
-          messageBox.setFixedSize(500, 200);
-      }
+      QMessageBox messageBox;
+      messageBox.critical(0, "Error",
+                          "Error with maze file!\n"
+                          "Random maze generated.");
+      messageBox.setFixedSize(500, 200);
+    }
   }
 }
 
-void View::SaveMaze()
-{
-    QString fileName = QFileDialog::getSaveFileName(
-          this, "Save Maze File", "", "Maze Files (*.txt)");
-      if (!fileName.isEmpty()) {
-        controller_->Save(fileName.toStdString());
-      }
+void View::SaveMaze() {
+  QString fileName = QFileDialog::getSaveFileName(this, "Save Maze File", "",
+                                                  "Maze Files (*.txt)");
+  if (!fileName.isEmpty()) {
+    controller_->Save(fileName.toStdString());
+  }
 }
 
 void View::GenMaze() {
