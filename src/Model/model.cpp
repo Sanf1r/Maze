@@ -2,13 +2,16 @@
 
 namespace s21 {
 
-void Model::Load(const std::string &path) {
+bool Model::Load(const std::string &path) {
   std::ifstream inFile(path);
   std::string temp;
   std::getline(inFile, temp);
   std::istringstream ss(temp);
+  int c = 0;
 
   ss >> rows_ >> cols_;
+
+  if (rows_ < 1 || cols_ < 1) return false;
 
   data_vert_.Clear();
   data_hor_.Clear();
@@ -20,22 +23,57 @@ void Model::Load(const std::string &path) {
     std::getline(inFile, temp);
     std::istringstream ss(temp);
     int x;
-    while (ss >> x) {
+    c = 0;
+    while (ss >> x || !ss.eof()) {
+        if ((x != 1 && x != 0) || ss.fail()) return false;
       data_vert_.Push(x);
+      c++;
     }
+    if (c != cols_) return false;
   }
 
   std::getline(inFile, temp);
 
   for (int i = 0; i < rows_; ++i) {
-    std::string temp;
     std::getline(inFile, temp);
     std::istringstream ss(temp);
+    c = 0;
     int x;
-    while (ss >> x) {
+    while (ss >> x || !ss.eof()) {
+        if ((x != 1 && x != 0) || ss.fail()) return false;
       data_hor_.Push(x);
+      c++;
     }
+    if (c != cols_) return false;
   }
+
+  return true;
+}
+
+void Model::Save(const std::string &path) {
+    std::ofstream f(path);
+
+      f << rows_ << " " << cols_ << std::endl;
+      for (int i = 0; i < rows_; ++i) {
+        for (int j = 0; j < cols_; ++j) {
+            if (j != 0) f << ' ';
+          f << data_vert_(i,j);
+        }
+        f << std::endl;
+      }
+
+      f << std::endl;
+
+      for (int i = 0; i < rows_; ++i) {
+        for (int j = 0; j < cols_; ++j) {
+            if (j != 0) f << ' ';
+          f << data_hor_(i,j);
+        }
+        f << std::endl;
+      }
+
+      f.close();
+
 }
 
 bool Model::RandomBool() {
@@ -180,7 +218,7 @@ int Model::EnterBox(int value, int box) {
   return box;
 }
 
-void Model::SolveMaze(int step) {
+void Model::ForwardMaze(int step) {
   int result = 0;
   for (int i = 0; i < rows_; i++) {
     for (int j = 0; j < cols_; j++) {
@@ -207,7 +245,7 @@ void Model::MakeWay(int i_start, int j_start, int i_end, int j_end) {
   map_(i_start, j_start) = 0;
   int step = 0;
   while (map_(i_end, j_end) == -1) {
-    SolveMaze(step++);
+    ForwardMaze(step++);
   }
   int i = i_end, j = j_end;
   right__path_.clear();

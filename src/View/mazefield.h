@@ -27,16 +27,16 @@ class MazeField : public QWidget {
   void mousePressEvent(QMouseEvent *event) override;
 
  private:
-  s21::Controller *controller_;
+  Controller *controller_;
   QPoint begin_, end_;
   bool left_ = false, right_ = false;
-  double cellWidth_ = 0.0;
-  double cellHeight_ = 0.0;
+  double cell_width_ = 0.0;
+  double cell_height_ = 0.0;
   double i_start_, j_start_, i_end_, j_end_;
 
-  QPoint MakePointCoords(std::pair<int, int> pathIndex);
-  void startPoint();
-  void endPoint();
+  QPoint MakePointCoords(std::pair<int, int> path_index);
+  void StartPoint();
+  void EndPoint();
 };
 
 }  // namespace s21

@@ -31,12 +31,13 @@ class View : public QMainWindow {
   ~View();
 
   void LoadMaze();
+  void SaveMaze();
   void GenMaze();
   void Redme();
 
  private:
   Ui::View *ui_;
-  s21::Controller *controller_;
+  Controller *controller_;
 };
 
 }  // namespace s21

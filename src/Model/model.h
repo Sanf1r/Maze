@@ -15,17 +15,20 @@ namespace s21 {
 class Model {
  public:
   Model() { GenerateMaze(5, 5); };
-  void Load(const std::string &path);
+
   int GetRows() { return rows_; }
   int GetCols() { return cols_; }
   Data &GetVert() { return data_vert_; }
   Data &GetHor() { return data_hor_; }
   std::vector<std::pair<int, int>> &GetPath() { return right__path_; }
+
+  bool Load(const std::string &path);
+  void Save(const std::string &path);
   void GenerateMaze(int rows, int cols);
   void SolveMaze(int i_start, int j_start, int i_end, int j_end);
   void ClearMap();
 
- private:
+private:
   int rows_ = 0;
   int cols_ = 0;
   int counter_ = 1;
@@ -50,7 +53,7 @@ class Model {
   void PreparatingNewLine(int row);
   void CreateMap();
   int EnterBox(int value, int box);
-  void SolveMaze(int step);
+  void ForwardMaze(int step);
   void MakeWay(int i_start, int j_start, int i_end, int j_end);
 };
 
