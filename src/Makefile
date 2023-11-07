@@ -38,7 +38,7 @@ dvi2:
 	open $(FILE_NAME_L)/index.html 
 
 .PHONY: dvi
-dvi: ## generate and open doc
+dvi: ## generate and open doc hello
 	cd doxygen && doxygen Doxyfile && open html/index.html
 
 .PHONY: dist
