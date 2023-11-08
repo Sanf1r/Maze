@@ -4,6 +4,8 @@ Tested on MacOS Big Sur 11.6.6.
 
 Made on November 8 2023 as part of my education in School 21 :)
 
+https://github.com/Sanf1r/Maze/assets/100280376/1a0ddf68-4049-467b-ba08-d71edc58544e
+
 ## Introduction
 
 This project is about mazes, including the basic algorithms of their handling, such as: generation, rendering, solving.
