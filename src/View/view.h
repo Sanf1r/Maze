@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef A1_MAZE_SRC_VIEW_MAINWINDOW_H_
+#define A1_MAZE_SRC_VIEW_MAINWINDOW_H_
 
 #include <QFileDialog>
 #include <QMainWindow>
@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "../Controller/controller.h"
-#include "mazefield.h"
+#include "./mazefield.h"
 #include "ui_view.h"
 
 QT_BEGIN_NAMESPACE
@@ -33,7 +33,7 @@ class View : public QMainWindow {
   void LoadMaze();
   void SaveMaze();
   void GenMaze();
-  void Redme();
+  void Readme();
 
  private:
   Ui::View *ui_;
@@ -42,4 +42,4 @@ class View : public QMainWindow {
 
 }  // namespace s21
 
-#endif  // MAINWINDOW_H
+#endif  //  A1_MAZE_SRC_VIEW_MAINWINDOW_H_

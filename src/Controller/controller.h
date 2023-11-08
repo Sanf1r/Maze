@@ -1,5 +1,5 @@
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#ifndef A1_MAZE_SRC_CONTROLLER_CONTROLLER_H_
+#define A1_MAZE_SRC_CONTROLLER_CONTROLLER_H_
 
 #include "../Model/model.h"
 
@@ -29,4 +29,4 @@ class Controller {
 
 }  // namespace s21
 
-#endif  //  CONTROLLER_H_
+#endif  //  A1_MAZE_SRC_CONTROLLER_CONTROLLER_H_

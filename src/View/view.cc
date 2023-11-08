@@ -9,11 +9,16 @@ View::View(Controller *c, QWidget *parent)
   connect(ui_->pushButton, &QPushButton::released, this, &View::LoadMaze);
   connect(ui_->pushButton_2, &QPushButton::released, this, &View::GenMaze);
   connect(ui_->pushButton_3, &QPushButton::released, this, &View::SaveMaze);
-  connect(ui_->pushButton_4, &QPushButton::released, this, &View::Redme);
+  connect(ui_->pushButton_4, &QPushButton::released, this, &View::Readme);
 }
 
 View::~View() { delete ui_; }
 
+/**
+ * @brief Method that calls a window to select a file and starts reading the
+ * file
+ *
+ */
 void View::LoadMaze() {
   QString fileName = QFileDialog::getOpenFileName(this, "Open Maze File", "",
                                                   "Maze Files (*.txt)");
@@ -34,6 +39,11 @@ void View::LoadMaze() {
   }
 }
 
+/**
+ * @brief Method that calls a window for choosing where to save the file and
+ * starts saving the file
+ *
+ */
 void View::SaveMaze() {
   QString fileName = QFileDialog::getSaveFileName(this, "Save Maze File", "",
                                                   "Maze Files (*.txt)");
@@ -42,6 +52,11 @@ void View::SaveMaze() {
   }
 }
 
+/**
+ * @brief The method cleans the map, resets the flags and starts generating a
+ * new maze
+ *
+ */
 void View::GenMaze() {
   controller_->ClearMap();
   ui_->maze->ResetFlags();
@@ -49,7 +64,12 @@ void View::GenMaze() {
   update();
 }
 
-void View::Redme() {
+/**
+ * @brief The method calls an information window with a detailed description of
+ * the buttons operation
+ *
+ */
+void View::Readme() {
   QMessageBox msgBox;
   msgBox.setText(
       "Instructions:\n"

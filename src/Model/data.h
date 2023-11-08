@@ -1,7 +1,9 @@
-#ifndef DATA_H
-#define DATA_H
+#ifndef A1_MAZE_SRC_MODEL_DATA_H_
+#define A1_MAZE_SRC_MODEL_DATA_H_
 
 #include <vector>
+
+namespace s21 {
 
 class Data {
  public:
@@ -15,11 +17,9 @@ class Data {
   void Push(int num) { data_.push_back(num); }
 
   void SetCol(int num) { columns_ = num; }
-
   void SetRows(int newRows) { rows_ = newRows; }
 
   int GetRows() const { return rows_; }
-
   int GetColumns() const { return columns_; }
 
   void Init(int size, int num) {
@@ -33,4 +33,6 @@ class Data {
   std::vector<int> data_;
 };
 
-#endif  // DATA_H
+}  // namespace s21
+
+#endif  //  A1_MAZE_SRC_MODEL_DATA_H_

@@ -6,8 +6,18 @@ MazeField::MazeField(QWidget *parent) : QWidget{parent} {
   setFocusPolicy(Qt::ClickFocus);
 }
 
+/**
+ * @brief
+ *
+ * @param c
+ */
 void MazeField::SetControl(s21::Controller *c) { controller_ = c; }
 
+/**
+ * @brief Method for drawing a maze, and will also draw a path between two
+ * points
+ *
+ */
 void MazeField::paintEvent(QPaintEvent *) {
   QPainter painter(this);
   QPen pen(QApplication::palette().text().color(), 2);
@@ -35,7 +45,6 @@ void MazeField::paintEvent(QPaintEvent *) {
       }
       if (controller_->GetHor()(i, j)) {
         if (i + 1 == controller_->GetRows()) {
-          y0--;
           y1--;
         }
         if (j + 1 == controller_->GetCols()) {
@@ -64,6 +73,10 @@ void MazeField::paintEvent(QPaintEvent *) {
   }
 }
 
+/**
+ * @brief Calculates the coordinate (x and y) of the starting point
+ *
+ */
 void MazeField::StartPoint() {
   i_start_ = begin_.y() / cell_height_;
   j_start_ = begin_.x() / cell_width_;
@@ -71,6 +84,10 @@ void MazeField::StartPoint() {
   begin_.setY((int)i_start_ * cell_height_ + cell_height_ / 2);
 }
 
+/**
+ * @brief Calculates the coordinate (x and y) of the ending point
+ *
+ */
 void MazeField::EndPoint() {
   i_end_ = end_.y() / cell_height_;
   j_end_ = end_.x() / cell_width_;
@@ -78,12 +95,24 @@ void MazeField::EndPoint() {
   end_.setY((int)i_end_ * cell_height_ + cell_height_ / 2);
 }
 
+/**
+ * @brief Calculates the coordinate (x and y) of the point to be drawn
+​
+ *
+ * @param path_index
+ * @return QPoint
+ */
 QPoint MazeField::MakePointCoords(std::pair<int, int> path_index) {
   int xpos = path_index.second * cell_width_ + cell_width_ / 2;
   int ypos = path_index.first * cell_height_ + cell_height_ / 2;
   return QPoint(xpos, ypos);
 }
 
+/**
+ * @brief Handles mouse button clicks to draw points and paths between points
+ *
+ * @param event
+ */
 void MazeField::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton && !left_) {
     begin_ = event->pos();
@@ -104,6 +133,10 @@ void MazeField::mousePressEvent(QMouseEvent *event) {
   update();
 }
 
+/**
+ * @brief Resets flags to determine which mouse button was pressed
+ *
+ */
 void MazeField::ResetFlags() {
   left_ = false;
   right_ = false;

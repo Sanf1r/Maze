@@ -1,5 +1,5 @@
-#ifndef MAZEFIELD_H
-#define MAZEFIELD_H
+#ifndef A1_MAZE_SRC_VIEW_MAZEFIELD_H_
+#define A1_MAZE_SRC_VIEW_MAZEFIELD_H_
 
 #include <QApplication>
 #include <QKeyEvent>
@@ -18,21 +18,19 @@ class MazeField : public QWidget {
   explicit MazeField(QWidget *parent = nullptr);
 
   void paintEvent(QPaintEvent *) override;
-
   void SetControl(s21::Controller *c);
-
   void ResetFlags();
 
  protected:
   void mousePressEvent(QMouseEvent *event) override;
 
  private:
-  Controller *controller_;
+  Controller *controller_ = nullptr;
   QPoint begin_, end_;
   bool left_ = false, right_ = false;
   double cell_width_ = 0.0;
   double cell_height_ = 0.0;
-  double i_start_, j_start_, i_end_, j_end_;
+  double i_start_ = 0, j_start_ = 0, i_end_ = 0, j_end_ = 0;
 
   QPoint MakePointCoords(std::pair<int, int> path_index);
   void StartPoint();
@@ -41,4 +39,4 @@ class MazeField : public QWidget {
 
 }  // namespace s21
 
-#endif  // MAZEFIELD_H
+#endif  //  A1_MAZE_SRC_VIEW_MAZEFIELD_H_

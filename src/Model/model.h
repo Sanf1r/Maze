@@ -1,5 +1,5 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef A1_MAZE_SRC_MODEL_MODEL_H_
+#define A1_MAZE_SRC_MODEL_MODEL_H_
 
 #include <fstream>
 #include <iostream>
@@ -59,4 +59,4 @@ class Model {
 
 }  // namespace s21
 
-#endif  // MODEL_H
+#endif  //  A1_MAZE_SRC_MODEL_MODEL_H_

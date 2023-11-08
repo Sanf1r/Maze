@@ -2,12 +2,20 @@
 
 namespace s21 {
 
+/**
+ * @brief The method reads data from a file and fills two
+ * vectors for vertical and horizontal lines and the size of the maze
+ *
+ * @param path
+ * @return true
+ * @return false
+ */
 bool Model::Load(const std::string &path) {
   std::ifstream inFile(path);
   std::string temp;
   std::getline(inFile, temp);
   std::istringstream ss(temp);
-  int c = 0;
+  int c;
 
   ss >> rows_ >> cols_;
 
@@ -21,11 +29,11 @@ bool Model::Load(const std::string &path) {
 
   for (int i = 0; i < rows_; ++i) {
     std::getline(inFile, temp);
-    std::istringstream ss(temp);
+    std::istringstream vss(temp);
     int x;
     c = 0;
-    while (ss >> x || !ss.eof()) {
-      if ((x != 1 && x != 0) || ss.fail()) return false;
+    while (vss >> x || !vss.eof()) {
+      if ((x != 1 && x != 0) || vss.fail()) return false;
       data_vert_.Push(x);
       c++;
     }
@@ -36,11 +44,11 @@ bool Model::Load(const std::string &path) {
 
   for (int i = 0; i < rows_; ++i) {
     std::getline(inFile, temp);
-    std::istringstream ss(temp);
+    std::istringstream hss(temp);
     c = 0;
     int x;
-    while (ss >> x || !ss.eof()) {
-      if ((x != 1 && x != 0) || ss.fail()) return false;
+    while (hss >> x || !hss.eof()) {
+      if ((x != 1 && x != 0) || hss.fail()) return false;
       data_hor_.Push(x);
       c++;
     }
@@ -50,6 +58,12 @@ bool Model::Load(const std::string &path) {
   return true;
 }
 
+/**
+ * @brief The method reads the maze data and stores it as the size of the
+ * maze as well as a matrix of vertical lines and a matrix of horizontal lines
+ *
+ * @param path
+ */
 void Model::Save(const std::string &path) {
   std::ofstream f(path);
 
@@ -75,6 +89,12 @@ void Model::Save(const std::string &path) {
   f.close();
 }
 
+/**
+ * @brief Generates random responses to requests for drawing maze walls
+ *
+ * @return true
+ * @return false
+ */
 bool Model::RandomBool() {
   std::random_device rd;
   std::mt19937 rng(rd());
@@ -82,6 +102,12 @@ bool Model::RandomBool() {
   return (gen(rng) == 1) ? true : false;
 }
 
+/**
+ * @brief Generates a maze randomly and with a certain size
+ *
+ * @param rows
+ * @param cols
+ */
 void Model::GenerateMaze(int rows, int cols) {
   rows_ = rows;
   cols_ = cols;
@@ -106,12 +132,20 @@ void Model::GenerateMaze(int rows, int cols) {
   AddingEndLine();
 }
 
+/**
+ * @brief Fills the line of maze with 0
+ *
+ */
 void Model::FillEmpty() {
   for (int i = 0; i < cols_; i++) {
     gen_string_.push_back(0);
   }
 }
 
+/**
+ * @brief Checks cells and fills with unique values as needed
+ *
+ */
 void Model::AssignUniqueSet() {
   for (int i = 0; i < cols_; i++) {
     if (gen_string_[i] == 0) {
@@ -120,6 +154,11 @@ void Model::AssignUniqueSet() {
   }
 }
 
+/**
+ * @brief Fills an array with data on the vertical walls of the maze
+ *
+ * @param row
+ */
 void Model::AddingVerticalWalls(int row) {
   for (int i = 0; i < cols_ - 1; i++) {
     bool choise = RandomBool();
@@ -132,6 +171,12 @@ void Model::AddingVerticalWalls(int row) {
   data_vert_(row, cols_ - 1) = 1;
 }
 
+/**
+ * @brief
+ *
+ * @param index
+ * @param element
+ */
 void Model::MergeSet(int index, int element) {
   int mutableSet = gen_string_[index + 1];
   for (int j = 0; j < cols_; j++) {
@@ -141,6 +186,11 @@ void Model::MergeSet(int index, int element) {
   }
 }
 
+/**
+ * @brief Fills an array with data on the horizontal walls of the maze
+ *
+ * @param row
+ */
 void Model::AddingHorizontalWalls(int row) {
   for (int i = 0; i < cols_; i++) {
     bool choise = RandomBool();
@@ -150,6 +200,12 @@ void Model::AddingHorizontalWalls(int row) {
   }
 }
 
+/**
+ * @brief
+ *
+ * @param element
+ * @return int
+ */
 int Model::CalculateUniqueSet(int element) {
   int countUniqSet = 0;
   for (int i = 0; i < cols_; i++) {
@@ -160,6 +216,11 @@ int Model::CalculateUniqueSet(int element) {
   return countUniqSet;
 }
 
+/**
+ * @brief
+ *
+ * @param row
+ */
 void Model::CheckedHorizontalWalls(int row) {
   for (int i = 0; i < cols_; i++) {
     if (CalculateHorizontalWalls(gen_string_[i], row) == 0) {
@@ -168,6 +229,13 @@ void Model::CheckedHorizontalWalls(int row) {
   }
 }
 
+/**
+ * @brief Counts the number of horizontal walls in row
+ *
+ * @param element
+ * @param row
+ * @return int
+ */
 int Model::CalculateHorizontalWalls(int element, int row) {
   int countHorizontalWalls = 0;
   for (int i = 0; i < cols_; i++) {
@@ -178,6 +246,11 @@ int Model::CalculateHorizontalWalls(int element, int row) {
   return countHorizontalWalls;
 }
 
+/**
+ * @brief
+ *
+ * @param row
+ */
 void Model::PreparatingNewLine(int row) {
   for (int i = 0; i < cols_; i++) {
     if (data_hor_(row, i) == 1) {
@@ -186,12 +259,20 @@ void Model::PreparatingNewLine(int row) {
   }
 }
 
+/**
+ * @brief
+ *
+ */
 void Model::AddingEndLine() {
   AssignUniqueSet();
   AddingVerticalWalls(rows_ - 1);
   CheckedEndLine();
 }
 
+/**
+ * @brief
+ *
+ */
 void Model::CheckedEndLine() {
   for (int i = 0; i < cols_ - 1; i++) {
     if (gen_string_[i] != gen_string_[i + 1]) {
@@ -203,12 +284,23 @@ void Model::CheckedEndLine() {
   data_hor_(rows_ - 1, cols_ - 1) = 1;
 }
 
+/**
+ * @brief
+ *
+ */
 void Model::CreateMap() {
   map_.Clear();
   map_.SetCol(cols_);
   map_.Init(rows_ * cols_, -1);
 }
 
+/**
+ * @brief
+ *
+ * @param value
+ * @param box
+ * @return int
+ */
 int Model::EnterBox(int value, int box) {
   if (box == -1)
     box = value;
@@ -217,6 +309,11 @@ int Model::EnterBox(int value, int box) {
   return box;
 }
 
+/**
+ * @brief
+ *
+ * @param step
+ */
 void Model::ForwardMaze(int step) {
   int result = 0;
   for (int i = 0; i < rows_; i++) {
@@ -240,6 +337,14 @@ void Model::ForwardMaze(int step) {
   }
 }
 
+/**
+ * @brief Fills an array with the coordinates of the path between two points
+ *
+ * @param i_start
+ * @param j_start
+ * @param i_end
+ * @param j_end
+ */
 void Model::MakeWay(int i_start, int j_start, int i_end, int j_end) {
   map_(i_start, j_start) = 0;
   int step = 0;
@@ -266,11 +371,23 @@ void Model::MakeWay(int i_start, int j_start, int i_end, int j_end) {
   }
 }
 
+/**
+ * @brief Draws a maze and also draws a path between two points
+ *
+ * @param i_start
+ * @param j_start
+ * @param i_end
+ * @param j_end
+ */
 void Model::SolveMaze(int i_start, int j_start, int i_end, int j_end) {
   CreateMap();
   MakeWay(i_start, j_start, i_end, j_end);
 }
 
+/**
+ * @brief Clears maze data
+ *
+ */
 void Model::ClearMap() {
   map_.Clear();
   right__path_.clear();
